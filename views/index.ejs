@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><%= title %></title>
+            <link rel='stylesheet' href='/stylesheets/style.css' />
+    </head>
+    <body>
+        <h1><%= title %></h1>
+        <h2>Players: </h2>
+        <table class="playerList" border='0'>
+        <tr><td>Player 1</td><td>Player 2</td></tr>
+        <%
+            for(var i=0; i < players.length; i++) {
+                var player = players[i];
+        %>
+            <tr>
+                <td><input type="radio" name="player1" value="<%-player._id%>"><%-player.name%></td>
+                <td><input type="radio" name="player2" value="<%-player._id%>"><%-player.name%></td>
+            </tr>
+        <%
+            }
+        %>
+        </table>
+        <button class='startRound'>Start Round</button>
+        <hr>
+        <h3>Create a new player</h3>
+        <p>Player name</p>
+        <input class='name' type='text'>
+        <p>Function to execute</p>
+        <textarea class='func' rows=15 cols=80></textarea>
+        <p/>
+        <button class="create">Create Player</button>
+        <p class='resp'></p>
+    </body>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script>
+    <script>
+
+        var success = function() {
+            $resp.text('Successfully created player');
+        };
+
+        var error = function() {
+            $resp.text('Error creating player');
+        };
+
+        var gameFinish = function(resp) {
+            $resp.text('The Winner is ' + resp.winner.name);
+        };
+
+        var $name = $('.name'),
+            $func = $('.func'),
+            $resp = $('.resp');
+
+        $('.create').click(function() {
+
+            var name = $name.val(),
+                func = $func.val();
+
+            if( (name && name !== "") && (func && func !== "") ) {
+                $.ajax({
+                    data: JSON.stringify({
+                        func: func,
+                        name: name
+                    }),
+                    method: "POST",
+                    dataType: "json",
+                    contentType: "application/json",
+                    url: "/rps/players",
+                    success: success,
+                    error: error
+                });
+            }
+        });
+
+        $('.startRound').click(function() {
+
+            var player2 = $('input[name="player2"]:checked').val(),
+                player1 = $('input[name="player1"]:checked').val();
+
+            $.ajax({
+                data: JSON.stringify({
+                    player1: player1,
+                    player2: player2
+                }),
+                method: "POST",
+                dataType: "json",
+                contentType: "application/json",
+                url: "/rps/startGame",
+                success: gameFinish,
+                error: error
+            });
+
+        });
+
+    </script>
+</html>
