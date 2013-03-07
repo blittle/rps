@@ -37,19 +37,21 @@ exports.createPlayer = function(req, res, next) {
 };
 
 exports.startGame = function(req, res, next) {
-    var player1 = req.body.player1,
-        player2 = req.body.player2;
+    var player1temp = req.body.player1,
+        player2temp = req.body.player2;
 
-    var playersToPlay =_.filter(players, function(player) {
+    var player1 =_.find(players, function(player) {
         player = JSON.parse(JSON.stringify(player));
-        return player1 === player._id || player2 === player._id;
+        return player1temp === player._id;
     });
 
-    if(playersToPlay.length === 1) playersToPlay.push(playersToPlay[0]);
+    var player2 = _.find(players, function(player) {
+        player = JSON.parse(JSON.stringify(player));
+        return player2temp === player._id;
+    });
 
-
-    var func1 = (new Function(playersToPlay[0].func))(),
-        func2 = (new Function(playersToPlay[1].func))();
+    var func1 = (new Function(player1.func))(),
+        func2 = (new Function(player2.func))();
 
     var result1 = null,
         result2 = null,
