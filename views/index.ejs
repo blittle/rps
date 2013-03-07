@@ -36,7 +36,7 @@
             <h3>Instructions</h3>
             <p>The function body should return a function that will be called for each guess. This allows you to use a closure
             to store values for each run within a match. The returned function will be passed the other players guess for the
-            last run.</p>
+            last run. Your function should return only one of the following: 0 (rock), 1 (paper), 2 (scissors)</p>
             <h3>Example</h3>
             <p>Example that returns what beats the last person's guess:</p>
             <pre>
@@ -67,7 +67,7 @@ return function(otherGuess) {
         };
 
         var gameFinish = function(resp) {
-            $resp.text('The Winner is ' + resp.winner.name);
+            $resp.html('Player 1: ' + resp.player1 + '<br>Player 2: ' + resp.player2);
         };
 
         var $name = $('.name'),

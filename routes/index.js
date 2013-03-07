@@ -94,14 +94,9 @@ exports.startGame = function(req, res, next) {
 
     }
 
-    var winner = player1Wins > player2Wins ? playersToPlay[0] : playersToPlay[1];
-
-    if(player1Wins === player2Wins) {
-        winner = playersToPlay
-    }
-
     res.send({
-        winner: winner
+        player1: player1Wins,
+        player2: player2Wins
     });
 };
 
