@@ -48,17 +48,23 @@ exports.startGame = function(req, res, next) {
     if(playersToPlay.length === 1) playersToPlay.push(playersToPlay[0]);
 
 
-    var func1 = new Function(playersToPlay[0].func),
-        func2 = new Function(playersToPlay[1].func);
+    var func1 = (new Function(playersToPlay[0].func))(),
+        func2 = (new Function(playersToPlay[1].func))();
 
-    var result1, result2,
+    var result1 = null,
+        result2 = null,
         player1Wins = 0,
         player2Wins = 0;
 
+    var temp1, temp2;
+
     for(var i = 0; i < 1000; i++) {
 
-        result1 = func1(result2);
-        result2 = func2(result1);
+        temp1 = func1(result2);
+        temp2 = func2(result1);
+
+        result1 = temp1;
+        result2 = temp2;
 
         if(result1 === result2) continue;
 

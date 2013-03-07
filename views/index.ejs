@@ -23,13 +23,35 @@
         </table>
         <button class='startRound'>Start Round</button>
         <hr>
-        <h3>Create a new player</h3>
-        <p>Player name</p>
-        <input class='name' type='text'>
-        <p>Function to execute</p>
-        <textarea class='func' rows=15 cols=80></textarea>
-        <p/>
-        <button class="create">Create Player</button>
+        <div class='col'>
+            <h3>Create a new player</h3>
+            <p>Player name</p>
+            <input class='name' type='text'>
+            <p>Function to execute</p>
+            <textarea class='func' rows=15 cols=80></textarea>
+            <p/>
+            <button class="create">Create Player</button>
+        </div>
+        <div class='col instructions'>
+            <h3>Instructions</h3>
+            <p>The function body should return a function that will be called for each guess. This allows you to use a closure
+            to store values for each run within a match. The returned function will be passed the other players guess for the
+            last run.</p>
+            <h3>Example</h3>
+            <p>Example that returns what beats the last person's guess:</p>
+            <pre>
+var myLastGuess;
+
+return function(otherGuess) {
+
+    if(otherGuess === null) return 0;
+
+    myLastGuess = otherGuess === 2 ? 0 : otherGuess + 1;
+
+    return myLastGuess;
+}
+            </pre>
+        </div>
         <p class='resp'></p>
     </body>
 
