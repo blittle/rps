@@ -21,7 +21,7 @@
             }
         %>
         </table>
-        <button class='startRound'>Start Round</button>
+        <button class='startRound'>Start Round</button><span class='roundFinish'></span>
         <hr>
         <div class='col'>
             <h3>Create a new player</h3>
@@ -85,12 +85,13 @@ return function(otherGuess) {
         };
 
         var gameFinish = function(resp) {
-            $resp.html((resp.test ? 'Test Function: ' : 'Player 1: ') + resp.player1 + '<br>Player 2: ' + resp.player2);
+            $finish.html((resp.test ? 'Test Function: ' : 'Player 1: ') + resp.player1 + '<br>Player 2: ' + resp.player2);
         };
 
         var $name = $('.name'),
             $func = $('.func'),
-            $resp = $('.resp');
+            $resp = $('.resp'),
+            $finish = $('.roundFinish');
 
         $('.create').click(function() {
 
