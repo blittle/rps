@@ -95,7 +95,21 @@ exports.startGame = function(req, res, next) {
     var func1 = (new Function(player1.func))(),
         func2 = (new Function(player2.func))();
 
-    res.send(startGame(func1, func2));
+    var tRequire = require,
+        tRandom = Math.random,
+        tDate = Date;
+
+    require = function() {return {}};
+    Math.random = function() {return 0};
+    Date = function() {};
+
+    var result = startGame(func1, func2);
+
+    require = tRequire;
+    Date = tDate;
+    Math.random = tRandom;
+
+    res.send(result);
 };
 
 exports.getPlayers = function(req, res) {
@@ -109,10 +123,6 @@ function startGame(func1, func2) {
         result2 = null,
         player1Wins = 0,
         player2Wins = 0;
-
-    var tRequire = require;
-
-    require = function() {};
 
     for(var i = 0; i < 1000; i++) {
 
@@ -149,8 +159,6 @@ function startGame(func1, func2) {
         }
 
     }
-
-    require = tRequire;
 
     return {
         player1: player1Wins,
