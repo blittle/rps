@@ -36,6 +36,24 @@ exports.createPlayer = function(req, res, next) {
     });
 };
 
+exports.testGame = function(req, res, next) {
+    var player2Id = req.body.player,
+        testFunc = req.body.func;
+
+    var player2 =_.find(players, function(player) {
+        player = JSON.parse(JSON.stringify(player));
+        return player2Id === player._id;
+    });
+
+    var func1 = (new Function(testFunc))(),
+        func2 = (new Function(player2.func))();
+
+    var resp = startGame(func1, func2);
+    resp.test = true;
+
+    res.send(resp);
+};
+
 exports.startGame = function(req, res, next) {
     var player1temp = req.body.player1,
         player2temp = req.body.player2;
@@ -53,12 +71,24 @@ exports.startGame = function(req, res, next) {
     var func1 = (new Function(player1.func))(),
         func2 = (new Function(player2.func))();
 
-    var result1 = null,
+    res.send(startGame(func1, func2));
+};
+
+exports.getPlayers = function(req, res) {
+    res.send(players);
+};
+
+function startGame(func1, func2) {
+
+    var temp1, temp2,
+        result1 = null,
         result2 = null,
         player1Wins = 0,
         player2Wins = 0;
 
-    var temp1, temp2;
+    var tRequire = require;
+
+    require = function() {};
 
     for(var i = 0; i < 1000; i++) {
 
@@ -96,12 +126,10 @@ exports.startGame = function(req, res, next) {
 
     }
 
-    res.send({
+    require = tRequire;
+
+    return {
         player1: player1Wins,
         player2: player2Wins
-    });
-};
-
-exports.getPlayers = function(req, res) {
-    res.send(players);
-};
+    }
+}

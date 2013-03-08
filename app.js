@@ -33,6 +33,7 @@ app.get('/users', user.list);
 
 app.post('/rps/players', routes.createPlayer);
 app.post('/rps/startGame', routes.startGame);
+app.post('/rps/testGame', routes.testGame);
 app.get('/rps/players', routes.getPlayers);
 
 http.createServer(app).listen(app.get('port'), function(){

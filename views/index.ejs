@@ -30,7 +30,18 @@
             <p>Function to execute</p>
             <textarea class='func' rows=15 cols=80></textarea>
             <p/>
-            <button class="create">Create Player</button>
+            <select class="testRunPlayer">
+                        <%
+                            for(var i=0; i < players.length; i++) {
+                                var player = players[i];
+                        %>
+                            <option value=<%-player._id%>><%-player.name%></option>
+                        <%
+                            }
+                        %>
+                    </select>
+            <button class='testRun' title="Test run the above function with another player">Test Run</button>
+            <button class="create" title="Create a new player with the above name and function">Create Player</button>
         </div>
         <div class='col instructions'>
             <h3>Instructions</h3>
@@ -67,7 +78,7 @@ return function(otherGuess) {
         };
 
         var gameFinish = function(resp) {
-            $resp.html('Player 1: ' + resp.player1 + '<br>Player 2: ' + resp.player2);
+            $resp.html((resp.test ? 'Test Function: ' : 'Player 1: ') + resp.player1 + '<br>Player 2: ' + resp.player2);
         };
 
         var $name = $('.name'),
@@ -93,6 +104,24 @@ return function(otherGuess) {
                     error: error
                 });
             }
+        });
+
+        $('.testRun').click(function() {
+            var testPlayer = $('.testRunPlayer').val(),
+                func = $func.val();
+
+            $.ajax({
+                data: JSON.stringify({
+                    player: testPlayer,
+                    func: func
+                }),
+                method: "POST",
+                dataType: "json",
+                contentType: "application/json",
+                url: "/rps/testGame",
+                success: gameFinish,
+                error: error
+            });
         });
 
         $('.startRound').click(function() {
