@@ -22,10 +22,28 @@ exports.createPlayer = function(req, res, next) {
 
     var player = req.body;
 
-    if(player.func.indexOf('Random') !== -1 || player.func.indexOf('Date') !== -1) {
+    if( player.func.indexOf('random') !== -1 ||
+        player.func.indexOf('Date') !== -1 ||
+        player.func.indexOf('require') !== -1
+    ) {
         next({msg: "Cannot use Date or Random objects"});
         return;
     }
+
+    try {
+        var func = (new Function(player.func))();
+
+        var result = func(func(null));
+
+        if(typeof result !== 'number') {
+            next({msg: "function must return number"});
+            return;
+        }
+    } catch(error) {
+        next({msg: "error parsing or executing the function"});
+        return;
+    }
+
 
     db.players.save(player, function(err, saved) {
         if(err || !saved) {
@@ -45,10 +63,16 @@ exports.testGame = function(req, res, next) {
         return player2Id === player._id;
     });
 
-    var func1 = (new Function(testFunc))(),
-        func2 = (new Function(player2.func))();
+    try {
+        var func1 = (new Function(testFunc))(),
+            func2 = (new Function(player2.func))();
 
-    var resp = startGame(func1, func2);
+        var resp = startGame(func1, func2);
+    } catch(error) {
+        next({msg: "Cannot compile or run your function!"});
+        return;
+    }
+
     resp.test = true;
 
     res.send(resp);

@@ -69,12 +69,19 @@ return function(otherGuess) {
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script>
     <script>
 
-        var success = function() {
+        var success = function(resp) {
             $resp.text('Successfully created player');
+
+            $('.playerList').append(
+            '<tr>' +
+            '<td><input type="radio" name="player1" value="' + resp._id + '">' + resp.name + '</td>' +
+            '<td><input type="radio" name="player1" value="' + resp._id + '">' + resp.name + '</td>' +
+            '<tr>');
+
         };
 
-        var error = function() {
-            $resp.text('Error creating player');
+        var error = function(resp) {
+            $resp.text('Error, is your function correct?');
         };
 
         var gameFinish = function(resp) {
