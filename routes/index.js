@@ -33,7 +33,7 @@ exports.createPlayer = function(req, res, next) {
 
         var result = func(func(null));
 
-        if(typeof result !== 'number') {
+        if(typeof result !== 'number' || isNaN(result)) {
             next({msg: "function must return number"});
             return;
         }
@@ -185,6 +185,9 @@ function startGame(func1, func2) {
                 } else if(result2 === 1) {
                     player1Wins++;
                 }
+                break;
+            default:
+                throw("Must return 0, 1, or 2");
                 break;
         }
 
