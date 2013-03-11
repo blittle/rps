@@ -25,7 +25,8 @@ exports.createPlayer = function(req, res, next) {
 
     if( player.func.indexOf('random') !== -1 ||
         player.func.indexOf('Date') !== -1 ||
-        player.func.indexOf('require') !== -1
+        player.func.indexOf('require') !== -1 ||
+        player.func.indexOf('console') !== -1
     ) {
         next({msg: "Cannot use Date or Random objects"});
         return;
@@ -117,13 +118,16 @@ exports.startGame = function(req, res, next) {
     var func1 = (new Function(player1.func))(),
         func2 = (new Function(player2.func))();
 
-    var tRequire = require;
+    var tRequire = require,
+        tConsole = console.log;
 
     require = function() {return {}};
+    console.log = function() {};
 
     var result = startGame(func1, func2);
 
     require = tRequire;
+    console.log = tConsole;
 
     res.send(result);
 };
