@@ -16,6 +16,7 @@
             <tr>
                 <td><input type="radio" name="player1" value="<%-player._id%>"><%-player.name%></td>
                 <td><input type="radio" name="player2" value="<%-player._id%>"><%-player.name%></td>
+                <td><button class='delete' data-val="<%-player._id%>">Delete</button></td>
             </tr>
         <%
             }
@@ -75,8 +76,9 @@ return function(otherGuess) {
             $('.playerList').append(
             '<tr>' +
             '<td><input type="radio" name="player1" value="' + resp._id + '">' + resp.name + '</td>' +
-            '<td><input type="radio" name="player1" value="' + resp._id + '">' + resp.name + '</td>' +
-            '<tr>');
+            '<td><input type="radio" name="player2" value="' + resp._id + '">' + resp.name + '</td>' +
+            '<td><button class="delete" data-val="' + resp._id + '">Delete</button></td>' +
+            '</tr>');
 
         };
 
@@ -149,6 +151,24 @@ return function(otherGuess) {
                 success: gameFinish,
                 error: error
             });
+
+        });
+
+        $('.delete').click(function(e) {
+            var id = $(e.target).attr('data-val');
+
+            if(confirm("Are you sure?")) {
+                $.ajax({
+                    method: "DELETE",
+                    dataType: "json",
+                    contentType: "application/json",
+                    url: "/rps/players/" + id,
+                    complete: function() {
+                        $(e.target).closest('tr').remove();
+                    },
+                    error: error
+                });
+            }
 
         });
 

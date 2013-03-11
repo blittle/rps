@@ -35,6 +35,7 @@ app.post('/rps/players', routes.createPlayer);
 app.post('/rps/startGame', routes.startGame);
 app.post('/rps/testGame', routes.testGame);
 app.get('/rps/players', routes.getPlayers);
+app.del('/rps/players/:id', routes.removePlayer);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));

@@ -10,6 +10,7 @@
     "lodash" : "latest",
     "ejs": "*",
     "less-middleware": "*",
-    "mongojs": "latest"
+    "mongojs": "latest",
+    "mongodb": "latest"
   }
 }

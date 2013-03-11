@@ -1,5 +1,6 @@
 var mongo = require('mongojs'),
-    _     = require('lodash');
+    _     = require('lodash'),
+    ObjectID = require('mongodb').ObjectID;
 
 var db = mongo.connect('rps', [
     "players",
@@ -50,6 +51,27 @@ exports.createPlayer = function(req, res, next) {
             res.send({error: "cannot create player"});
         } else {
             res.send(req.body);
+            players.push(player);
+        }
+    });
+};
+
+exports.getPlayers = function(req, res) {
+    res.send(players);
+};
+
+exports.removePlayer = function(req, res) {
+    var id = req.params.id;
+
+    players = _.without(players, _.find(players, function(player) {
+        return JSON.parse(JSON.stringify(player))._id === id;
+    }));
+
+    db.players.remove({_id: new ObjectID(id)}, function(err, removed) {
+        if(err || !removed) {
+            res.send({error: "cannot remove player"});
+        } else {
+            res.send();
         }
     });
 };
@@ -95,25 +117,15 @@ exports.startGame = function(req, res, next) {
     var func1 = (new Function(player1.func))(),
         func2 = (new Function(player2.func))();
 
-    var tRequire = require,
-        tRandom = Math.random,
-        tDate = Date;
+    var tRequire = require;
 
     require = function() {return {}};
-    Math.random = function() {return 0};
-    Date = function() {};
 
     var result = startGame(func1, func2);
 
     require = tRequire;
-    Date = tDate;
-    Math.random = tRandom;
 
     res.send(result);
-};
-
-exports.getPlayers = function(req, res) {
-    res.send(players);
 };
 
 function startGame(func1, func2) {
