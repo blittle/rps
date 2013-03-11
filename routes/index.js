@@ -1,6 +1,7 @@
 var mongo = require('mongojs'),
     _     = require('lodash'),
-    ObjectID = require('mongodb').ObjectID;
+    ObjectID = require('mongodb').ObjectID,
+    executor = require('./executor.js');
 
 var db = mongo.connect('rps', [
     "players",
@@ -34,7 +35,7 @@ exports.createPlayer = function(req, res, next) {
         var result = func(func(null));
 
         if(typeof result !== 'number' || isNaN(result)) {
-            next({msg: "function must return number"});
+            next({msg: "function must return 0, 1, or 2"});
             return;
         }
     } catch(error) {
@@ -122,21 +123,27 @@ exports.startGame = function(req, res, next) {
     if(funcIsBad(player2.func)) {
         res.send({
             player1: 1,
-            player2: 0 + " - Cannot use illegal methods",
+            player2: 0 + " - Cannot use illegal methods"
         });
         return;   
     }
 
-    var func1 = (new Function(player1.func))(),
-        func2 = (new Function(player2.func))();
+    try {
 
-    var tRequire = require,
-        tConsole = console.log;
+        var func1 = (new Function(player1.func))(),
+            func2 = (new Function(player2.func))();
 
-    require = function() {return {}};
-    console.log = function() {};
+        var tRequire = require,
+            tConsole = console.log;
 
-    var result = startGame(func1, func2);
+        require = function() {return {}};
+        console.log = function() {};
+
+        var result = startGame(func1, func2);
+    
+    } catch(error) {
+        next(error.message);
+    }
 
     require = tRequire;
     console.log = tConsole;
@@ -156,13 +163,29 @@ function startGame(func1, func2) {
 
     for(var i = 0; i < 1000; i++) {
 
-        temp1 = func1(result2);
-        temp2 = func2(result1);
+        temp1 = executor.execute(func1, result2);
+        temp2 = executor.execute(func2, result1);
 
         result1 = temp1;
         result2 = temp2;
 
         if(result1 === result2) continue;
+
+        if(result1 < 0 || result1 > 2 || typeof result1 !== 'number') {
+           return {
+                player1: result1 + " Your function must always return a 0, 1, or 2",
+                player2: result2,
+                i: i
+           }
+        }
+
+        if(result2 < 0 || result2 > 2 || typeof result2 !== 'number') {
+           return {
+                player1: result1,
+                player2: result2 + " Your function must always return a 0, 1, or 2",
+                i: i
+           }
+        }
 
         switch(result1) {
             case 0:  // Rock
@@ -186,16 +209,14 @@ function startGame(func1, func2) {
                     player1Wins++;
                 }
                 break;
-            default:
-                throw("Must return 0, 1, or 2");
-                break;
         }
 
     }
 
     return {
         player1: player1Wins,
-        player2: player2Wins
+        player2: player2Wins,
+        i: 1000
     }
 }
 

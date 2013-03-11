@@ -88,6 +88,9 @@ return function(otherGuess) {
 
         var gameFinish = function(resp) {
             $finish.html((resp.test ? 'Test Function: ' : 'Player 1: ') + resp.player1 + '<br>Player 2: ' + resp.player2);
+            if(resp.i) {
+                $finish.append('<br>Iterations: ' + resp.i);
+            }
         };
 
         var $name = $('.name'),
