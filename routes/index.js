@@ -38,7 +38,7 @@ exports.createPlayer = function(req, res, next) {
             return;
         }
     } catch(error) {
-        next({msg: "error parsing or executing the function"});
+        next({msg: "error parsing or executing the function: " + error.message});
         return;
     }
 
@@ -88,7 +88,7 @@ exports.testGame = function(req, res, next) {
 
         var resp = startGame(func1, func2);
     } catch(error) {
-        next({msg: "Cannot compile or run your function!"});
+        next({msg: "Cannot compile or run your function! " + error.message});
         return;
     }
 
