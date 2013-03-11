@@ -23,11 +23,7 @@ exports.createPlayer = function(req, res, next) {
 
     var player = req.body;
 
-    if( player.func.indexOf('random') !== -1 ||
-        player.func.indexOf('Date') !== -1 ||
-        player.func.indexOf('require') !== -1 ||
-        player.func.indexOf('console') !== -1
-    ) {
+    if(funcIsBad(player.func)) {
         next({msg: "Cannot use Date or Random objects"});
         return;
     }
@@ -115,6 +111,22 @@ exports.startGame = function(req, res, next) {
         return player2temp === player._id;
     });
 
+    if(funcIsBad(player1.func)) {
+        res.send({
+            player1: 0,
+            player2: 1
+        });
+        return;   
+    }
+
+    if(funcIsBad(player2.func)) {
+        res.send({
+            player1: 1,
+            player2: 0
+        });
+        return;   
+    }
+
     var func1 = (new Function(player1.func))(),
         func2 = (new Function(player2.func))();
 
@@ -180,4 +192,15 @@ function startGame(func1, func2) {
         player1: player1Wins,
         player2: player2Wins
     }
+}
+
+function funcIsBad(func) {
+    return (
+        func.indexOf('random') !== -1 ||
+        func.indexOf('Date') !== -1 ||
+        func.indexOf('require') !== -1 ||
+        func.indexOf('console') !== -1 ||
+        func.indexOf('callee') !== -1 ||
+        func.indexOf('caller') !== -1
+    );
 }
