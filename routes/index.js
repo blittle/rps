@@ -113,7 +113,7 @@ exports.startGame = function(req, res, next) {
 
     if(funcIsBad(player1.func)) {
         res.send({
-            player1: 0,
+            player1: 0 + " - Cannot use illegal methods",
             player2: 1
         });
         return;   
@@ -122,7 +122,7 @@ exports.startGame = function(req, res, next) {
     if(funcIsBad(player2.func)) {
         res.send({
             player1: 1,
-            player2: 0
+            player2: 0 + " - Cannot use illegal methods",
         });
         return;   
     }
@@ -145,6 +145,8 @@ exports.startGame = function(req, res, next) {
 };
 
 function startGame(func1, func2) {
+
+    "use strict";
 
     var temp1, temp2,
         result1 = null,
