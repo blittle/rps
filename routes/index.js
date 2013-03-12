@@ -34,7 +34,7 @@ exports.createPlayer = function(req, res, next) {
 
         var result = func(func(null));
 
-        if(typeof result !== 'number' || isNaN(result)) {
+        if(typeof result !== 'number' || isNaN(result) || result < 0 || result > 2) {
             next({msg: "function must return 0, 1, or 2"});
             return;
         }
