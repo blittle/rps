@@ -14,9 +14,9 @@
                 var player = players[i];
         %>
             <tr>
-                <td><input type="radio" name="player1" value="<%-player._id%>"><%-player.name%></td>
-                <td><input type="radio" name="player2" value="<%-player._id%>"><%-player.name%></td>
-                <td><button class='delete' data-val="<%-player._id%>">Delete</button></td>
+                <td><input type="radio" name="player1" value="<%=player._id%>"><%=player.name%></td>
+                <td><input type="radio" name="player2" value="<%=player._id%>"><%=player.name%></td>
+                <td><button class='delete' data-val="<%=player._id%>">Delete</button></td>
             </tr>
         <%
             }
@@ -36,7 +36,7 @@
                             for(var i=0; i < players.length; i++) {
                                 var player = players[i];
                         %>
-                            <option value=<%-player._id%>><%-player.name%></option>
+                            <option value=<%=player._id%>><%=player.name%></option>
                         <%
                             }
                         %>
@@ -48,7 +48,13 @@
             <h3>Instructions</h3>
             <p>The function body should return a function that will be called for each guess. This allows you to use a closure
             to store values for each run within a match. The returned function will be passed the other players guess for the
-            last run. Your function should return only one of the following: 0 (rock), 1 (paper), 2 (scissors). <strong>Illegal methods include: require, console, arguments.callee, arguements.caller, Date, and Math.random.</strong></p>
+            last run. Your function should return only one of the following: 0 (rock), 1 (paper), 2 (scissors). <strong>Illegal methods include: require, console, arguments.callee, arguements.caller, Date, and Math.random.</strong>
+            </p>
+            <p>
+            You should probably store and debug your code somewhere else because you will not have access to your code after
+            you create a player. Lukas created the following fiddle which may help out: <a href='http://jsfiddle.net/lolson/7vLrm/'>http://jsfiddle.net/lolson/7vLrm/</a>
+            </p>
+
             <h3>Example</h3>
             <p>Example that returns what beats the last person's guess:</p>
             <pre>

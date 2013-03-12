@@ -112,6 +112,22 @@ exports.startGame = function(req, res, next) {
         return player2temp === player._id;
     });
 
+    if(!player1) {
+        res.send({
+            player1: "Player 1 is undefined",
+            player2: ""
+        });
+        return;
+    }
+
+    if(!player2) {
+        res.send({
+            player1: "",
+            player2: "Player 1 is undefined"
+        });
+        return;
+    }
+
     if(funcIsBad(player1.func)) {
         res.send({
             player1: 0 + " - Cannot use illegal methods",
