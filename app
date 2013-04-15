@@ -1,1 +1,1 @@
-node app.js > logs/log.txt &
+nohup node app.js > logs/log.txt &
