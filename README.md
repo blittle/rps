@@ -1,4 +1,4 @@
 rps
 ===
 
-A Rock Paper Scissors Game for Simplifile Employees
+A Rock Paper Scissors Game.
